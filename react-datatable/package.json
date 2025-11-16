@@ -1,0 +1,17 @@
+{
+  "name": "react-datatable",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "keywords": ["react","datatable","react-datatable"],
+  "author": "Phaneth Pho",
+  "license": "MIT",
+
+  "dependencies": {
+    "react": "^19.2.0"
+  }
+}
