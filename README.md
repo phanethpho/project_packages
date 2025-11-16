@@ -107,3 +107,9 @@ Specify a license in the root and in each package (e.g., MIT). See `LICENSE` at 
 ---
 
 Update this README to reflect the real package names, APIs and workspace tooling used in your repo. Each package should include its own README with component-specific examples and API docs.
+
+## publish npm package cli
+
+```bash
+npm publish --access public
+```
