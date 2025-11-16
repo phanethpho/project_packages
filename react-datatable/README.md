@@ -8,6 +8,54 @@ A comprehensive guide for using and contributing to the React DataTable componen
 npm i @phaneth_pho/react-datatable
 ```
 
+## Install tailwind css
+
+```bash
+
+npm install tailwindcss @tailwindcss/vite
+
+```
+
+## update your vite.config.ts
+
+```bash
+vite.config.ts
+
+import { defineConfig } from 'vite'
+import tailwindcss from '@tailwindcss/vite'
+export default defineConfig({
+  plugins: [
+    tailwindcss(),
+  ],
+})
+```
+
+## update tailwind.config.js
+
+```bash
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: [
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
+    "./node_modules/@phaneth_pho/react-datatable/**/*.{js,ts,jsx,tsx}" // include your library
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+};
+
+```
+
+## update your index.css everything 
+
+```bash
+index.css
+
+@import "tailwindcss";
+```
+
 ## Basic Usage
 ```jsx
 import {DataTable} from '@phaneth_pho/react-datatable'

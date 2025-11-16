@@ -6,9 +6,9 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Button } from "@/components/ui/button";
+} from "./ui/table";
+import { Checkbox } from "./ux/checkbox";
+import { Button } from "./ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,7 +17,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "./ui/dropdown-menu";
 
 import {
   ArrowUpDown,
@@ -36,7 +36,7 @@ import {
   flexRender,
   getPaginationRowModel,
 } from "@tanstack/react-table";
-import { Input } from "@/components/ui/input";
+import { Input } from "./ux/input";
 import { Spinner2 } from "./ui/spinner2";
 
 // ---- Utility: Format Date -----
