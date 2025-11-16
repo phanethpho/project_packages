@@ -1,6 +1,6 @@
 {
   "name": "@phaneth_pho/react-datatable",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "publishConfig": {
     "access": "public"
   },
@@ -16,12 +16,14 @@
     "dev": "vite",
     "prod": "vite build",
     "clean": "rimraf dist",
-    "build": "npm run clean && rollup -c && npm run copy:css",
+    "build": "npm run clean && rollup -c && npm run copy:css && npm run copy:component && npm run copy:lib",
     "build:types": "tsc --emitDeclarationOnly",
     "prepare": "npm run build",
     "lint": "eslint src --ext .js,.jsx,.ts,.tsx",
     "test": "vitest run",
     "copy:css": "copyfiles -f src/styles.css dist",
+    "copy:component": "copyfiles -f src/components/ui/** dist/components/ui",
+    "copy:lib":"copyfiles -f src/lib/** dist/lib",
     "dev:example": "cd example && npm run dev"
   },
   "keywords": [
@@ -36,6 +38,8 @@
   "dependencies": {
     "@babel/parser": "^7.28.5",
     "@tailwindcss/vite": "^4.1.17",
+    "@tanstack/react-table": "^8.21.3",
+    "lucide-react": "^0.553.0",
     "prop-types": "^15.8.1",
     "tailwindcss": "^4.1.17"
   },
