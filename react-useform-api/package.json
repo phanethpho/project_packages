@@ -1,0 +1,36 @@
+{
+  "name": "@phaneth/react-useform-api",
+  "version": "1.0.9",
+  "description": "A lightweight React hook for handling API requests (GET, POST, PUT, DELETE) with loading and error states.",
+  "main": "src/index.js",
+  "module": "src/index.js",
+  "types": "src/index.d.ts",
+  "keywords": [
+    "react",
+    "hook",
+    "axios",
+    "form",
+    "useForm",
+    "api",
+    "crud"
+  ],
+  "author": "Phaneth Pho",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/phaneth2014/react-useform-api"
+  },
+  "bugs": {
+    "url": "https://github.com/phaneth2014/react-useform-api/issues"
+  },
+  "homepage": "https://github.com/phaneth2014/react-useform-api#readme",
+  "dependencies": {
+    "axios": "^1.7.0"
+  },
+  "peerDependencies": {
+    "react": ">=17.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
