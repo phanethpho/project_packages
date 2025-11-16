@@ -8,12 +8,12 @@ Installation
 
 Run this in your React project folder:
 
-    npm install @phaneth_pho/react-useform-api
+    npm i react-usefor-api
 
 
 or with Yarn:
 
-    yarn add @phaneth_pho/react-useform-api
+    yarn add react-usefor-api
 
 2. Import and use inside a React component
 
@@ -21,7 +21,7 @@ Example component (UserForm.jsx):
 
 ```bash
 import React, { useEffect } from "react";
-import useForm from "@phaneth_pho/react-useform-api";
+import useForm from "react-useform-api";
 
 export default function UserForm() {
   // Initialize the hook with your base API URL

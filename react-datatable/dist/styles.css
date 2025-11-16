@@ -1,0 +1,19 @@
+
+/* Basic styling for NPM-ready table */
+.datatable table {
+width: 100%;
+border-collapse: collapse;
+}
+
+
+.datatable th,
+.datatable td {
+border: 1px solid #e5e5e5;
+padding: 8px 12px;
+}
+
+
+.datatable thead {
+background: #f9f9f9;
+font-weight: bold;
+}
