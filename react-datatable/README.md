@@ -2,6 +2,7 @@
 
 ## Overview
 A comprehensive guide for using and contributing to the React DataTable component library.
+![alt text](image.png)
 
 ## Installation
 ```bash
