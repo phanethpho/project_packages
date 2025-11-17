@@ -40,6 +40,7 @@ import {
 import { Input } from "./ui/input";
 import { Spinner2 } from "./ui/spinner2";
 
+
 // ---- Utility: Format Date -----
 function formatDate(value) {
   const d = new Date(value);
@@ -180,6 +181,9 @@ export default function Datatable({
   onEdit,
   onDelete,
   onSelected,
+  onExport = false,
+  onSearch = false,
+  onColumn = false,
 }) {
   const [search, setSearch] = useState("");
   const [pageSize, setPageSize] = useState(10); // default 10 rows per page
@@ -227,9 +231,12 @@ export default function Datatable({
   const exportDataToExcel = async () => {
     try {
       await new Promise((resolve) => setTimeout(resolve, 500));
+
       const header = Object.keys(data[0]); // Get headers from the first object
       const rows = data.map((row) => header.map((h) => row[h]).join(",")); // Map data to CSV rows
+
       const csvString = [header.join(","), ...rows].join("\n"); // Combine header and rows
+
       const blob = new Blob([csvString], { type: "text/csv;charset=utf-8;" });
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
@@ -241,8 +248,6 @@ export default function Datatable({
       console.log(error);
     }
   };
-
-
 
   if (loading)
     return (
@@ -258,19 +263,25 @@ export default function Datatable({
     <div className="max-w-full">
       <div className="flex justify-between items-center py-4">
         <div className="flex justify-baseline">
-          <Input
-            placeholder="Search..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="max-w-sm"
-          />
-          {filteredData.length && (
-            <Button variant="outline" className="w-22" onClick={exportDataToExcel}>
+          {onSearch && (
+            <Input
+              placeholder="Search..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="max-w-sm"
+            />
+          )}
+
+          {filteredData.length && onExport && (
+            <Button
+              variant="outline"
+              className="w-22"
+              onClick={exportDataToExcel}
+            >
               <Download /> Export
             </Button>
-            
           )}
-          
+
           {table.getFilteredSelectedRowModel().rows.length > 0 &&
             onSelected && (
               <Button variant="outline" onClick={delSelected}>
@@ -283,45 +294,51 @@ export default function Datatable({
         <div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="ml-2 bg-background">
+              <Button variant="outline" className="ml-2">
                 Rows: {pageSize} <ChevronDown />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               {[5, 10, 20, 50, 100].map((size) => (
-                <DropdownMenuItem className="hover:cursor-pointer bg-background" key={size} onClick={() => setPageSize(size)}>
+                <DropdownMenuItem
+                  className="hover:cursor-pointer bg-background"
+                  key={size}
+                  onClick={() => setPageSize(size)}
+                >
                   {size} rows
                 </DropdownMenuItem>
               ))}
             </DropdownMenuContent>
           </DropdownMenu>
 
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="ml-auto">
-                Columns <ChevronDown />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="bg-background">
-              {table
-                .getAllColumns()
-                .filter((column) => column.getCanHide())
-                .map((column) => {
-                  return (
-                    <DropdownMenuCheckboxItem
-                      key={column.id}
-                      className="capitalize over:cursor-pointer bg-background"
-                      checked={column.getIsVisible()}
-                      onCheckedChange={(value) =>
-                        column.toggleVisibility(!!value)
-                      }
-                    >
-                      {column.id}
-                    </DropdownMenuCheckboxItem>
-                  );
-                })}
-            </DropdownMenuContent>
-          </DropdownMenu>
+          {onColumn && (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" className="ml-auto">
+                  Columns <ChevronDown />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                {table
+                  .getAllColumns()
+                  .filter((column) => column.getCanHide())
+                  .map((column) => {
+                    return (
+                      <DropdownMenuCheckboxItem
+                        key={column.id}
+                        className="capitalize hover:cursor-pointer bg-background"
+                        checked={column.getIsVisible()}
+                        onCheckedChange={(value) =>
+                          column.toggleVisibility(!!value)
+                        }
+                      >
+                        {column.id}
+                      </DropdownMenuCheckboxItem>
+                    );
+                  })}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
         </div>
       </div>
 
@@ -369,9 +386,21 @@ export default function Datatable({
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
         <div className="text-muted-foreground flex-1 text-sm">
-          {table.getFilteredSelectedRowModel().rows.length} of{" "}
-          {table.getFilteredRowModel().rows.length} row(s) selected.
+          Showing{" "}
+          {table.getFilteredRowModel().rows.length === 0
+            ? 0
+            : table.getState().pagination.pageIndex *
+                table.getState().pagination.pageSize +
+              1}{" "}
+          to{" "}
+          {Math.min(
+            (table.getState().pagination.pageIndex + 1) *
+              table.getState().pagination.pageSize,
+            table.getFilteredRowModel().rows.length
+          )}{" "}
+          of {table.getFilteredRowModel().rows.length} row(s)
         </div>
+
         <div className="space-x-2">
           <Button
             variant="outline"
