@@ -160,6 +160,39 @@ export default App;
   }
 
 ```
+
+## custom TailwindCSS and custom UI components (Button, Input, Checkbox, DropdownMenu)
+
+### Added custom style props:
+- className → wrapper
+- buttonClass → all buttons (Prev/Next, selected rows)
+- inputClass → search input
+- checkboxClass → select checkboxes
+- dropdownClass → dropdown menu content
+- exportButtonClass → export button
+- Updated all internal elements to respect these props.
+
+```bash
+
+<DataTable
+  className="bg-white shadow-md rounded-xl"
+  buttonClass="bg-blue-50 text-blue-700 hover:bg-blue-100"
+  inputClass="border-blue-300 focus:ring-blue-200"
+  checkboxClass="text-red-500"
+  dropdownClass="bg-gray-50 shadow-lg"
+  exportButtonClass="text-green-700 border-green-300"
+  loading={isLoading}
+  data={users}
+  onDetails={handleDetails}
+  onDelete={handleDelete}
+  onEdit={handleEdit}
+  onSelected={handleSelected}
+  onExport={true}
+  onSearch={true}
+  onColumn={true}
+/>
+
+```
 ## sample datatable
 
 ```bash

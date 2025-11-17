@@ -1,6 +1,6 @@
 {
   "name": "@phaneth_pho/react-datatable",
-  "version": "1.0.26",
+  "version": "1.0.30",
   "publishConfig": {
     "access": "public"
   },

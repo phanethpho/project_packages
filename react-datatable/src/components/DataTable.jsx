@@ -184,11 +184,17 @@ export default function Datatable({
   onExport = false,
   onSearch = false,
   onColumn = false,
+  // Custom style props
+  className = "",
+  buttonClass = "",
+  inputClass = "",
+  checkboxClass = "",
+  dropdownClass = "",
+  exportButtonClass = "",
 }) {
   const [search, setSearch] = useState("");
   const [pageSize, setPageSize] = useState(10); // default 10 rows per page
 
-  // Filter data based on search
   const filteredData = React.useMemo(() => {
     if (!search) return data;
     return data.filter((row) =>
@@ -199,51 +205,42 @@ export default function Datatable({
   }, [data, search]);
 
   const columns = React.useMemo(
-    () => buildColumns(filteredData, onDetails, onEdit, onDelete),
-    [filteredData, onDetails, onEdit, onDelete]
+    () => buildColumns(filteredData, onDetails, onEdit, onDelete, checkboxClass),
+    [filteredData, onDetails, onEdit, onDelete, checkboxClass]
   );
 
   const table = useReactTable({
     data: filteredData,
     columns,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(), // <-- add pagination
-    getSortedRowModel: getSortedRowModel(), // <-- Add this
-    enableSorting: true, // optional, all columns sortable by default
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    enableSorting: true,
   });
 
-  // update table page size
   React.useEffect(() => {
     table.setPageSize(pageSize);
   }, [pageSize, table]);
 
-  //rows selection
   const delSelected = async () => {
     const rows = await table.getFilteredSelectedRowModel().rows;
-    const data = [];
-    rows.forEach((item) => {
-      data.push(item.original);
-    });
-    if (onSelected) onSelected(data);
+    const selectedData = rows.map((item) => item.original);
+    if (onSelected) onSelected(selectedData);
   };
 
-  // export data to excel
   const exportDataToExcel = async () => {
     try {
       await new Promise((resolve) => setTimeout(resolve, 500));
-
-      const header = Object.keys(data[0]); // Get headers from the first object
-      const rows = data.map((row) => header.map((h) => row[h]).join(",")); // Map data to CSV rows
-
-      const csvString = [header.join(","), ...rows].join("\n"); // Combine header and rows
-
+      const header = Object.keys(data[0]);
+      const rows = data.map((row) => header.map((h) => row[h]).join(","));
+      const csvString = [header.join(","), ...rows].join("\n");
       const blob = new Blob([csvString], { type: "text/csv;charset=utf-8;" });
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
       link.download = "export-data.csv";
       link.click();
-      await URL.revokeObjectURL(url);
+      URL.revokeObjectURL(url);
     } catch (error) {
       console.log(error);
     }
@@ -251,31 +248,35 @@ export default function Datatable({
 
   if (loading)
     return (
-      <div className="p-4 w-full text-center pt-12">
+      <div className={`p-4 w-full text-center pt-12 ${className}`}>
         <Spinner2 className="m-auto size-9" />
       </div>
     );
 
   if (!data.length)
-    return <div className="p-4 w-full text-center pt-12">No data found.</div>;
+    return (
+      <div className={`p-4 w-full text-center pt-12 ${className}`}>
+        No data found.
+      </div>
+    );
 
   return (
-    <div className="max-w-full">
+    <div className={`max-w-full ${className}`}>
       <div className="flex justify-between items-center py-4">
-        <div className="flex justify-baseline">
+        <div className="flex justify-baseline gap-2">
           {onSearch && (
             <Input
               placeholder="Search..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="max-w-sm"
+              className={`max-w-sm ${inputClass}`}
             />
           )}
 
           {filteredData.length && onExport && (
             <Button
               variant="outline"
-              className="w-22"
+              className={`${exportButtonClass} flex items-center gap-1`}
               onClick={exportDataToExcel}
             >
               <Download /> Export
@@ -284,25 +285,32 @@ export default function Datatable({
 
           {table.getFilteredSelectedRowModel().rows.length > 0 &&
             onSelected && (
-              <Button variant="outline" onClick={delSelected}>
+              <Button
+                variant="outline"
+                className={`${buttonClass} flex items-center gap-1`}
+                onClick={delSelected}
+              >
                 <span>[{table.getFilteredSelectedRowModel().rows.length}]</span>
                 <Trash className="text-red-400" />
               </Button>
             )}
         </div>
 
-        <div>
+        <div className="flex gap-2">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="ml-2">
+              <Button
+                variant="outline"
+                className={`${buttonClass}`}
+              >
                 Rows: {pageSize} <ChevronDown />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
+            <DropdownMenuContent align="end" className={`${dropdownClass}`}>
               {[5, 10, 20, 50, 100].map((size) => (
                 <DropdownMenuItem
-                  className="hover:cursor-pointer bg-background"
                   key={size}
+                  className="hover:cursor-pointer bg-background"
                   onClick={() => setPageSize(size)}
                 >
                   {size} rows
@@ -314,11 +322,11 @@ export default function Datatable({
           {onColumn && (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="ml-auto">
+                <Button variant="outline" className={`${buttonClass}`}>
                   Columns <ChevronDown />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
+              <DropdownMenuContent align="end" className={`${dropdownClass}`}>
                 {table
                   .getAllColumns()
                   .filter((column) => column.getCanHide())
@@ -342,7 +350,7 @@ export default function Datatable({
         </div>
       </div>
 
-      <div className="w-full overflow-auto border rounded-xl p-3 shadow-sm">
+      <div className={`w-full overflow-auto border rounded-xl p-3 shadow-sm ${className}`}>
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -353,17 +361,10 @@ export default function Datatable({
                     onClick={header.column.getToggleSortingHandler()}
                     className="cursor-pointer select-none"
                   >
-                    {flexRender(
-                      header.column.columnDef.header,
-                      header.getContext()
-                    )}
+                    {flexRender(header.column.columnDef.header, header.getContext())}
                     {{
-                      asc: (
-                        <ArrowDownNarrowWide className="inline-flex ml-1 size-4" />
-                      ),
-                      desc: (
-                        <ArrowUpWideNarrow className="inline-flex ml-1 size-4" />
-                      ),
+                      asc: <ArrowDownNarrowWide className="inline-flex ml-1 size-4" />,
+                      desc: <ArrowUpWideNarrow className="inline-flex ml-1 size-4" />,
                     }[header.column.getIsSorted()] ?? null}
                   </TableHead>
                 ))}
@@ -384,14 +385,13 @@ export default function Datatable({
           </TableBody>
         </Table>
       </div>
+
       <div className="flex items-center justify-end space-x-2 py-4">
         <div className="text-muted-foreground flex-1 text-sm">
           Showing{" "}
           {table.getFilteredRowModel().rows.length === 0
             ? 0
-            : table.getState().pagination.pageIndex *
-                table.getState().pagination.pageSize +
-              1}{" "}
+            : table.getState().pagination.pageIndex * table.getState().pagination.pageSize + 1}{" "}
           to{" "}
           {Math.min(
             (table.getState().pagination.pageIndex + 1) *
@@ -405,6 +405,7 @@ export default function Datatable({
           <Button
             variant="outline"
             size="sm"
+            className={buttonClass}
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
           >
@@ -413,6 +414,7 @@ export default function Datatable({
           <Button
             variant="outline"
             size="sm"
+            className={buttonClass}
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
           >
