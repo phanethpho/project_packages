@@ -17,28 +17,6 @@ npm install tailwindcss @tailwindcss/vite
 
 ```
 
-## update your vite.config.ts
-
-```bash
-vite.config.ts
-
-import { defineConfig } from 'vite'
-import tailwindcss from '@tailwindcss/vite'
-export default defineConfig({
-  plugins: [
-    tailwindcss(),
-  ],
-})
-```
-
-## update your index.css everything 
-
-```bash
-index.css
-
-@import "tailwindcss";
-```
-
 ## Basic Usage
 ```jsx
 import {DataTable} from '@phaneth_pho/react-datatable'
