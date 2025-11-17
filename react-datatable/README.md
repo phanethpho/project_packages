@@ -21,7 +21,6 @@ function App() {
 ## Features
 - Sortable columns
 - Pagination support
-- Responsive design
 - Header and body rendering by data[] array object automaticaly
 - Columns show/hide functionality
 - Search functionality
@@ -39,7 +38,6 @@ function App() {
 
 ## API Reference
 - `DataTable` - Main component
-- `useDataTable()` - Hook for table state
 
 ## Contributing
 See CONTRIBUTING.md for guidelines.
