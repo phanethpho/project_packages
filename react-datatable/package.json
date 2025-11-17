@@ -1,6 +1,6 @@
 {
   "name": "@phaneth_pho/react-datatable",
-  "version": "1.0.20",
+  "version": "1.0.24",
   "publishConfig": {
     "access": "public"
   },
@@ -16,7 +16,8 @@
     "dev": "vite",
     "prod": "vite build",
     "clean": "rimraf dist",
-    "build": "npm run clean && rollup -c rollup.config.cjs --bundleConfigAsCjs && npm run copy:css && npm run copy:component && npm run copy:lib",
+    "build:css": "npx tailwindcss -i ./src/styles.css -o ./dist/styles.css --minify",
+    "build": "npm run clean && rollup -c rollup.config.cjs --bundleConfigAsCjs && npm run build:css && npm run copy:component && npm run copy:lib",
     "build:types": "tsc --emitDeclarationOnly",
     "prepare": "npm run build",
     "lint": "eslint src --ext .js,.jsx,.ts,.tsx",
@@ -47,6 +48,7 @@
     "@radix-ui/react-slot": "^1.2.4",
     "@rollup/plugin-strip": "^3.0.4",
     "@tailwindcss/postcss": "^4.1.17",
+    "@tailwindcss/vite": "^4.1.17",
     "@tanstack/react-table": "^8.21.3",
     "class-variance-authority": "^0.7.1",
     "lucide-react": "^0.553.0",
@@ -70,7 +72,7 @@
     "rollup": "^4.53.2",
     "rollup-plugin-peer-deps-external": "^2.2.4",
     "tailwind-merge": "^3.4.0",
-    "tailwindcss": "^4.1.17",
+    "tailwindcss": "^3.4.18",
     "tslib": "^2",
     "typescript": "^5.9.3",
     "vite": "^7.2.2",
