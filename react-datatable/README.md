@@ -7,15 +7,6 @@ A comprehensive guide for using and contributing to the React DataTable componen
 ## Installation
 ```bash
 npm i @phaneth_pho/react-datatable
-```
-
-## Install tailwind css
-
-```bash
-
-npm install tailwindcss @tailwindcss/vite
-
-```
 
 ## Basic Usage
 ```jsx
@@ -62,22 +53,73 @@ MIT
 
 //src/App.jsx
 
-import React from "react";
-import { DataTable } from "@phaneth_pho/react-datatable"; // your library
-import "@phaneth_pho/react-datatable/dist/styles.css";    // library CSS
+import React, { useEffect, useState } from "react";
+import { DataTable } from "@phaneth_pho/react-datatable";
+import "@phaneth_pho/react-datatable/dist/styles.css";
+import data from './api/data';
 
+import "./App.css";
 
-const data = [
-  { id: 1, name: "John", email: "john@mail.com", age: 25, position: "Manager" },
-  { id: 2, name: "Sara", email: "sara@mail.com", age: 30, position: "Supervisor" },
-  { id: 3, name: "Mike", email: "mike@mail.com", age: 22, position: "Senior Associate" }
-];
+function App() {
+  const [users, setUsers] = useState([]);
 
-export default function App() {
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    getUsers();
+  }, []);
+
+  const getUsers = async () => {
+    try {
+      setIsLoading(true);
+
+      setUsers(data);
+      //console.log( users); // Array(6)
+    } catch (err) {
+      console.error(err);
+      setIsLoading(false);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Example handler for deleting a user
+  const handleDelete = async (data) => {
+    if (!window.confirm("Are you sure you want to delete this user?")) return;
+    try {
+      console.log("Response del:", data);
+
+      setUsers((prev) => prev.filter((row) => row.id !== data.id));
+      // await getUsers(); // ✅ Refresh list after delete
+    } catch (err) {
+      console.error("Delete error:", err);
+    }
+  };
+
+  // Example handler for updating a user
+  const handleEdit = async (data) => {
+    try {
+      console.log("response eidt:", data);
+
+      setUsers((prev) => prev.map((row) => (row.id === data.id ? data : row)));
+      // await getUsers(); // ✅ Refresh list after update
+    } catch (err) {
+      console.error("Update error:", err);
+    }
+  };
+
+  const handleDetails = async (data) => {
+    console.log("details:", data);
+  };
+
+  const handleSelected = async (data) => {
+    console.log(data);
+  };
+
   return (
     <div>
-      <h1>React DataTable Test</h1>
-      <Datatable
+      <h1>My DataTable</h1>
+      <DataTable
         loading={isLoading} //enabled spinner loading on event
         data={users} //asigned data to datatable
         onDetails={handleDetails} //details fuction callback
@@ -91,6 +133,9 @@ export default function App() {
     </div>
   );
 }
+
+export default App;
+
 
 ```
 
