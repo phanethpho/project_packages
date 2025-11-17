@@ -283,13 +283,13 @@ export default function Datatable({
         <div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="ml-2">
+              <Button variant="outline" className="ml-2 bg-background">
                 Rows: {pageSize} <ChevronDown />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               {[5, 10, 20, 50, 100].map((size) => (
-                <DropdownMenuItem key={size} onClick={() => setPageSize(size)}>
+                <DropdownMenuItem className="hover:cursor-pointer bg-background" key={size} onClick={() => setPageSize(size)}>
                   {size} rows
                 </DropdownMenuItem>
               ))}
@@ -302,7 +302,7 @@ export default function Datatable({
                 Columns <ChevronDown />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
+            <DropdownMenuContent align="end" className="bg-background">
               {table
                 .getAllColumns()
                 .filter((column) => column.getCanHide())
@@ -310,7 +310,7 @@ export default function Datatable({
                   return (
                     <DropdownMenuCheckboxItem
                       key={column.id}
-                      className="capitalize"
+                      className="capitalize over:cursor-pointer bg-background"
                       checked={column.getIsVisible()}
                       onCheckedChange={(value) =>
                         column.toggleVisibility(!!value)
