@@ -7,7 +7,7 @@ import {
   TableHeader,
   TableRow,
 } from "./ui/table";
-import { Checkbox } from "./ux/checkbox";
+import { Checkbox } from "./ui/checkbox";
 import { Button } from "./ui/button";
 import {
   DropdownMenu,
@@ -28,6 +28,7 @@ import {
   File,
   ArrowUpWideNarrow,
   ArrowDownNarrowWide,
+  Download,
 } from "lucide-react";
 import {
   getSortedRowModel,
@@ -36,8 +37,9 @@ import {
   flexRender,
   getPaginationRowModel,
 } from "@tanstack/react-table";
-import { Input } from "./ux/input";
+import { Input } from "./ui/input";
 import { Spinner2 } from "./ui/spinner2";
+import ButtonLoading from "./ButtonLoading";
 
 // ---- Utility: Format Date -----
 function formatDate(value) {
@@ -178,6 +180,7 @@ export default function Datatable({
   onDetails,
   onEdit,
   onDelete,
+  onSelected,
 }) {
   const [search, setSearch] = useState("");
   const [pageSize, setPageSize] = useState(10); // default 10 rows per page
@@ -211,6 +214,37 @@ export default function Datatable({
     table.setPageSize(pageSize);
   }, [pageSize, table]);
 
+  //rows selection
+  const delSelected = async () => {
+    const rows = await table.getFilteredSelectedRowModel().rows;
+    const data = [];
+    rows.forEach((item) => {
+      data.push(item.original);
+    });
+    if (onSelected) onSelected(data);
+  };
+
+  // export data to excel
+  const exportDataToExcel = async () => {
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      const header = Object.keys(data[0]); // Get headers from the first object
+      const rows = data.map((row) => header.map((h) => row[h]).join(",")); // Map data to CSV rows
+      const csvString = [header.join(","), ...rows].join("\n"); // Combine header and rows
+      const blob = new Blob([csvString], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "export-data.csv";
+      link.click();
+      await URL.revokeObjectURL(url);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+
+
   if (loading)
     return (
       <div className="p-4 w-full text-center pt-12">
@@ -224,12 +258,29 @@ export default function Datatable({
   return (
     <div className="max-w-full">
       <div className="flex justify-between items-center py-4">
-        <Input
-          placeholder="Search..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="max-w-sm"
-        />
+        <div className="flex justify-baseline">
+          <Input
+            placeholder="Search..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="max-w-sm"
+          />
+          {filteredData.length && (
+            <Button variant="outline" className="w-22" onClick={exportDataToExcel}>
+              <Download /> Export
+            </Button>
+            
+          )}
+          
+          {table.getFilteredSelectedRowModel().rows.length > 0 &&
+            onSelected && (
+              <Button variant="outline" onClick={delSelected}>
+                <span>[{table.getFilteredSelectedRowModel().rows.length}]</span>
+                <Trash className="text-red-400" />
+              </Button>
+            )}
+        </div>
+
         <div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>

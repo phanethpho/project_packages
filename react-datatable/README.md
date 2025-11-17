@@ -38,7 +38,7 @@ module.exports = {
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
-    "./node_modules/@phaneth_pho/react-datatable/**/*.{js,ts,jsx,tsx}" // include your library
+    "./node_modules/@phaneth_pho/react-datatable/**/*.{js,ts,jsx,tsx}" // include your project
   ],
   theme: {
     extend: {},
@@ -62,7 +62,7 @@ import {DataTable} from '@phaneth_pho/react-datatable'
 import "@phaneth_pho/react-datatable/dist/styles.css";
 
 function App() {
-  return <DataTable data={data} columns={columns} />;
+  return <DataTable data={data} />;
 }
 ```
 
@@ -70,8 +70,12 @@ function App() {
 - Sortable columns
 - Pagination support
 - Responsive design
-- Custom cell rendering
+- Header and body rendering by data[] array object automaticaly
+- Columns show/hide functionality
 - Search functionality
+- Export functionality
+- Select row functionality
+- Support tailwind css v4
 
 ## Configuration
 | Option | Type | Description |
@@ -116,13 +120,35 @@ export default function App() {
   return (
     <div>
       <h1>React DataTable Test</h1>
-      <DataTable columns={columns} data={data} selectable />
+      <Datatable
+        loading={isLoading} #enabled spinner loading on event
+        data={users} #asigned data to datatable
+        onDetails={handleDetails} #details fuction callback
+        onDelete={handleDelete} #delete function callback
+        onEdit={handleEdit} #edit function callback
+        onSelected={handleSelected} #enable selected rows
+        onExport={true} #enable export button
+        onSearch={true} #enable search box
+        onColumn={true} #enable show/hide column table
+      />
     </div>
   );
 }
 
-Start Vite dev server:
+```
+## sample datatable
 
+```bash
+      <Datatable
+        loading={isLoading} #enabled spinner loading on event
+        data={users} #asigned data to datatable
+      />
+
+```
+
+## start vite server Vite dev server:
+
+```bash
 npm run dev
 
 ```
