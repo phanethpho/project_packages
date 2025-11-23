@@ -143,7 +143,7 @@ function buildColumns(
               </Button>
             </DropdownMenuTrigger>
 
-            <DropdownMenuContent align="end">
+            <DropdownMenuContent align="end" className={dropdownClass ? `${dropdownClass}` : "capitalize hover:cursor-pointer bg-background"}>
               {onDetails && (
                 <DropdownMenuItem onClick={() => onDetails(item)}>
                   <File /> Detail
@@ -307,11 +307,10 @@ export default function Datatable({
                 Rows: {pageSize} <ChevronDown />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
+            <DropdownMenuContent align="end" className={dropdownClass ? `${dropdownClass}` : "capitalize hover:cursor-pointer bg-background"}>
               {[5, 10, 20, 50, 100].map((size) => (
                 <DropdownMenuItem
                   key={size}
-                  className={dropdownClass ? `${dropdownClass}` : "capitalize hover:cursor-pointer bg-background"}
                   onClick={() => setPageSize(size)}
                 >
                   {size} rows
@@ -327,7 +326,7 @@ export default function Datatable({
                   Columns <ChevronDown />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" >
+              <DropdownMenuContent align="end" className={dropdownClass ? `${dropdownClass}` : "capitalize hover:cursor-pointer bg-background"}>
                 {table
                   .getAllColumns()
                   .filter((column) => column.getCanHide())
@@ -335,7 +334,6 @@ export default function Datatable({
                     return (
                       <DropdownMenuCheckboxItem
                         key={column.id}
-                        className={dropdownClass ? `${dropdownClass}` : "capitalize hover:cursor-pointer bg-background"}
                         checked={column.getIsVisible()}
                         onCheckedChange={(value) =>
                           column.toggleVisibility(!!value)
