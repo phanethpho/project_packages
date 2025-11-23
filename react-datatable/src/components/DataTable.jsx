@@ -191,6 +191,7 @@ export default function Datatable({
   checkboxClass = "",
   dropdownClass = "",
   exportButtonClass = "",
+  tableRowClass = "",
 }) {
   const [search, setSearch] = useState("");
   const [pageSize, setPageSize] = useState(10); // default 10 rows per page
@@ -306,11 +307,11 @@ export default function Datatable({
                 Rows: {pageSize} <ChevronDown />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className={`${dropdownClass}`}>
+            <DropdownMenuContent align="end">
               {[5, 10, 20, 50, 100].map((size) => (
                 <DropdownMenuItem
                   key={size}
-                  className="hover:cursor-pointer bg-background"
+                  className={dropdownClass ? `${dropdownClass}` : "capitalize hover:cursor-pointer bg-background"}
                   onClick={() => setPageSize(size)}
                 >
                   {size} rows
@@ -326,7 +327,7 @@ export default function Datatable({
                   Columns <ChevronDown />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className={`${dropdownClass}`}>
+              <DropdownMenuContent align="end" >
                 {table
                   .getAllColumns()
                   .filter((column) => column.getCanHide())
@@ -334,7 +335,7 @@ export default function Datatable({
                     return (
                       <DropdownMenuCheckboxItem
                         key={column.id}
-                        className="capitalize hover:cursor-pointer bg-background"
+                        className={dropdownClass ? `${dropdownClass}` : "capitalize hover:cursor-pointer bg-background"}
                         checked={column.getIsVisible()}
                         onCheckedChange={(value) =>
                           column.toggleVisibility(!!value)
@@ -374,7 +375,7 @@ export default function Datatable({
 
           <TableBody>
             {table.getRowModel().rows.map((row) => (
-              <TableRow key={row.id}>
+              <TableRow key={row.id} className={tableRowClass ? `${tableRowClass}` : "border-background"}>
                 {row.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
