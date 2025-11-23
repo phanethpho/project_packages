@@ -181,6 +181,7 @@ export default App;
   checkboxClass="text-red-500"
   dropdownClass="bg-gray-50 shadow-lg"
   exportButtonClass="text-green-700 border-green-300"
+  tableRowClass="border-backround";
   loading={isLoading}
   data={users}
   onDetails={handleDetails}
