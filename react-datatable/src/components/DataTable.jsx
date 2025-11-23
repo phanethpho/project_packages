@@ -102,7 +102,8 @@ function buildColumns(
   data = [],
   onDetails = null,
   onEdit = null,
-  onDelete = null
+  onDelete = null,
+  dropdownClass = "",
 ) {
   const autoCols = generateColumnsFromData(data);
 
@@ -143,7 +144,7 @@ function buildColumns(
               </Button>
             </DropdownMenuTrigger>
 
-            <DropdownMenuContent align="end" className="capitalize hover:cursor-pointer bg-background">
+            <DropdownMenuContent align="end" className={dropdownClass ? `hover:cursor-pointer ${dropdownClass}` : "capitalize hover:cursor-pointer bg-background"}>
               {onDetails && (
                 <DropdownMenuItem onClick={() => onDetails(item)} className="hover:cursor-pointer bg-background">
                   <File /> Detail
@@ -158,7 +159,7 @@ function buildColumns(
               )}
               {onDelete && (
                 <DropdownMenuItem
-                  className={`text-red-400 hover:text-red-500 bg-background`}
+                  className={`text-red-400 hover:text-red-500 hover:cursor-pointer bg-background`}
                   onClick={() => onDelete(item)}
                 >
                   <Trash className="text-red-400" />
@@ -206,8 +207,8 @@ export default function Datatable({
   }, [data, search]);
 
   const columns = React.useMemo(
-    () => buildColumns(filteredData, onDetails, onEdit, onDelete, checkboxClass),
-    [filteredData, onDetails, onEdit, onDelete, checkboxClass]
+    () => buildColumns(filteredData, onDetails, onEdit, onDelete, checkboxClass, dropdownClass),
+    [filteredData, onDetails, onEdit, onDelete, checkboxClass, dropdownClass]
   );
 
   const table = useReactTable({
@@ -353,7 +354,7 @@ export default function Datatable({
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
+              <TableRow key={headerGroup.id} className={tableRowClass ? `${tableRowClass}` : "border-background"}>
                 {headerGroup.headers.map((header) => (
                   <TableHead
                     key={header.id}
