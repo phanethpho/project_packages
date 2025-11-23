@@ -143,22 +143,22 @@ function buildColumns(
               </Button>
             </DropdownMenuTrigger>
 
-            <DropdownMenuContent align="end" className={dropdownClass ? `${dropdownClass}` : "capitalize hover:cursor-pointer bg-background"}>
+            <DropdownMenuContent align="end" className="capitalize hover:cursor-pointer bg-background">
               {onDetails && (
-                <DropdownMenuItem onClick={() => onDetails(item)}>
+                <DropdownMenuItem onClick={() => onDetails(item)} className="hover:cursor-pointer bg-background">
                   <File /> Detail
                 </DropdownMenuItem>
               )}
 
               {onEdit && (
-                <DropdownMenuItem onClick={() => onEdit(item)}>
+                <DropdownMenuItem onClick={() => onEdit(item)} className="hover:cursor-pointer bg-background">
                   <Pencil />
                   Edit
                 </DropdownMenuItem>
               )}
               {onDelete && (
                 <DropdownMenuItem
-                  className={`text-red-400 hover:text-red-500`}
+                  className={`text-red-400 hover:text-red-500 bg-background`}
                   onClick={() => onDelete(item)}
                 >
                   <Trash className="text-red-400" />
@@ -307,7 +307,7 @@ export default function Datatable({
                 Rows: {pageSize} <ChevronDown />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className={dropdownClass ? `${dropdownClass}` : "capitalize hover:cursor-pointer bg-background"}>
+            <DropdownMenuContent align="end" className={dropdownClass ? `hover:cursor-pointer ${dropdownClass}` : "capitalize hover:cursor-pointer bg-background"}>
               {[5, 10, 20, 50, 100].map((size) => (
                 <DropdownMenuItem
                   key={size}
@@ -326,7 +326,7 @@ export default function Datatable({
                   Columns <ChevronDown />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className={dropdownClass ? `${dropdownClass}` : "capitalize hover:cursor-pointer bg-background"}>
+              <DropdownMenuContent align="end" className={dropdownClass ? `hover:cursor-pointer ${dropdownClass}` : "capitalize hover:cursor-pointer bg-background"}>
                 {table
                   .getAllColumns()
                   .filter((column) => column.getCanHide())
